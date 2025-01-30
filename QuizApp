@@ -1,0 +1,90 @@
+import java.util.*;
+
+public class QuizApp {
+    
+    static class Question {
+        String questionText;
+        String[] options;
+        String correctAnswer;
+
+        public Question(String questionText, String[] options, String correctAnswer) {
+            this.questionText = questionText;
+            this.options = options;
+            this.correctAnswer = correctAnswer;
+        }
+    }
+    
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Step 1: Define the quiz questions, options, and correct answers
+        Question[] quizQuestions = {
+            new Question("What is the capital of France?", 
+                         new String[]{"A. Paris", "B. Berlin", "C. Madrid", "D. Rome"}, 
+                         "A"),
+            new Question("Which planet is known as the Red Planet?", 
+                         new String[]{"A. Earth", "B. Mars", "C. Venus", "D. Jupiter"}, 
+                         "B"),
+            new Question("What is the largest ocean on Earth?", 
+                         new String[]{"A. Atlantic", "B. Pacific", "C. Indian", "D. Arctic"}, 
+                         "B"),
+            new Question("Who wrote 'Hamlet'?", 
+                         new String[]{"A. Shakespeare", "B. Dickens", "C. Orwell", "D. Twain"}, 
+                         "A"),
+            new Question("What is the square root of 16?", 
+                         new String[]{"A. 2", "B. 4", "C. 8", "D. 16"}, 
+                         "B")
+        };
+
+        int score = 0;
+        Map<Integer, String> results = new HashMap<>();
+        
+        // Step 2: Iterate through questions and ask the user
+        for (int i = 0; i < quizQuestions.length; i++) {
+            Question currentQuestion = quizQuestions[i];
+            
+            // Start timer
+            final long startTime = System.currentTimeMillis();
+            long timeLimit = 10000; // 10 seconds
+
+            // Display the question and options
+            System.out.println("Question " + (i + 1) + ": " + currentQuestion.questionText);
+            for (String option : currentQuestion.options) {
+                System.out.println(option);
+            }
+
+            // Get user input for answer within the time limit
+            System.out.print("\nYour answer: ");
+            String answer = scanner.nextLine().toUpperCase();
+
+            long elapsedTime = System.currentTimeMillis() - startTime;
+
+            // Check if time is exceeded
+            if (elapsedTime > timeLimit) {
+                System.out.println("Time's up!");
+                results.put(i, "Time's up");
+            } else {
+                // Check the answer
+                if (answer.equals(currentQuestion.correctAnswer)) {
+                    score++;
+                    results.put(i, "Correct");
+                } else {
+                    results.put(i, "Incorrect");
+                }
+            }
+
+            // Wait for a short period before the next question
+            System.out.println("\nMoving to next question...\n");
+        }
+
+        // Step 3: Display final score and summary
+        System.out.println("\nYour final score: " + score + "/" + quizQuestions.length);
+        System.out.println("\nSummary of results:");
+        for (int i = 0; i < quizQuestions.length; i++) {
+            System.out.println("Question " + (i + 1) + ": " + results.get(i));
+        }
+
+        scanner.close();
+    }
+}
+
